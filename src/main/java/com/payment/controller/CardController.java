@@ -1,5 +1,7 @@
 package com.payment.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.payment.model.Bank;
 import com.payment.model.Card;
 import com.payment.service.CardService;
 
@@ -50,4 +53,13 @@ public Card addCardDetails (@RequestBody Card card) {
       Card search=  cardService.searchCard(payerFirstName, payerLastName);
 	return search;
 }
+	@GetMapping("/bankByPage")
+	public List<Card> getCardByPage(@RequestParam (defaultValue = "0" )Integer pageNumber, 
+			                        @RequestParam (defaultValue = "100") Integer pageSize,
+			                        @RequestParam (defaultValue = "paymentMethod")String sortBy){
+		
+		List<Card> cardByPage = cardService.getAllCards(pageNumber, pageSize , sortBy);
+		
+		return cardByPage;
+	}
 	}

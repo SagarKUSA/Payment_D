@@ -1,5 +1,8 @@
 package com.payment.service;
 
+import java.util.List;
+
+import com.billing.model.Bill;
 import com.payment.model.Bank;
 
 public interface BankService {
@@ -13,5 +16,7 @@ public interface BankService {
 	public void deleteDetails (Integer id);
 	
 	public Bank search (String bankName , String bankAccountNumber);
+	
+	public List<Bank> getAllBank(Integer pageNumber , Integer pageSize , String sortBy);
 
 }

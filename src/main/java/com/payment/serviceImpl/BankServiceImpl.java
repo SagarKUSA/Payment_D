@@ -1,10 +1,17 @@
 package com.payment.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.billing.model.Bill;
 import com.payment.exception.ResourceNotFoundException;
 import com.payment.model.Bank;
 import com.payment.model.Card;
@@ -64,4 +71,17 @@ public class BankServiceImpl  implements BankService{
 
 	
 	}
+
+	@Override
+public List<Bank> getAllBank(Integer pageNumber, Integer pageSize , String sortBy) {
+		
+		Pageable paging = PageRequest.of(pageNumber, pageSize , Sort.by("bankName").ascending());
+		
+		Page< Bank> bankResult = bankRepository.findAll(paging);
+		
+		if(bankResult.hasContent()) {
+			return bankResult.getContent();
+	}
+         return new ArrayList<Bank>();
+}
 }
