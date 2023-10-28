@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.billing.model.Bill;
+
 import com.payment.exception.ResourceNotFoundException;
 import com.payment.model.Bank;
 import com.payment.model.Card;

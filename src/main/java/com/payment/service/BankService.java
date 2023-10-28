@@ -2,7 +2,7 @@ package com.payment.service;
 
 import java.util.List;
 
-import com.billing.model.Bill;
+
 import com.payment.model.Bank;
 
 public interface BankService {
