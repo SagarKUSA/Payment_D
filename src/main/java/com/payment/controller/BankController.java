@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.payment.exception.ResourceNotFoundException;
 import com.payment.model.Bank;
 import com.payment.model.Card;
@@ -100,4 +101,13 @@ public class BankController {
 		Bank search = bankService.search(bankName, bankAccountNumber);
 		return search;
 	}
+	@GetMapping("/bankByPage")
+	public List<Bank> getBankByPage(@RequestParam (defaultValue = "0" )Integer pageNumber, 
+			                        @RequestParam (defaultValue = "100") Integer pageSize,
+			                        @RequestParam (defaultValue = "bankName")String sortBy){
+		
+		List<Bank> bankByPage = bankService.getAllBank(pageNumber, pageSize , sortBy);
+		
+		return bankByPage;
+}
 }
