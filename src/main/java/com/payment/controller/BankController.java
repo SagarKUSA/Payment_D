@@ -19,61 +19,85 @@ import com.payment.model.Card;
 import com.payment.service.BankService;
 import com.payment.service.CardService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 public class BankController {
 	@Autowired
 	private BankService bankService;
-	
+
 	@Autowired
 	private CardService cardService;
-	
+
 	@PostMapping("/addBankCardDetails")
-public Bank addBankDetailsWithCard   (@RequestBody Bank bank) {
-		
-		Bank addBank= bankService.addDetails(bank);
-		
-		if(bank.getCardList() == null) {
-			 throw new ResourceNotFoundException("Given bank with card details are not avilable :" +bank);
+	@ApiOperation(value = "Request to add bank card details")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created"), 
+			@ApiResponse(code = 400, message = "Invalid Request"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public Bank addBankDetailsWithCard(@RequestBody Bank bank) {
+
+		Bank addBank = bankService.addDetails(bank);
+
+		if (bank.getCardList() == null) {
+			throw new ResourceNotFoundException("Given bank with card details are not avilable :" + bank);
 		}
-		
-	
-	
-	List<Card> cards = bank.getCardList();
-	for (Card card : cards) {
-		card.setBankid(bank.getId());
-		cardService.addCardDetails(card);
+
+		List<Card> cards = bank.getCardList();
+		for (Card card : cards) {
+			card.setBankid(bank.getId());
+			cardService.addCardDetails(card);
+		}
+		return addBank;
+
 	}
-	return addBank;
-	
-}
+
 	@PutMapping("/updateDetails")
-	public Bank updateDetails (@RequestBody Bank bank) {
-		
+	@ApiOperation(value = "Request to edit bank card details")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok"), 
+			@ApiResponse(code = 404, message = "Resource Not Found"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public Bank updateDetails(@RequestBody Bank bank) {
+
 		Bank update = bankService.updateDetails(bank);
-		
-		List<Card > cards = bank.getCardList();
-		
-		for(Card card :cards) {
+
+		List<Card> cards = bank.getCardList();
+
+		for (Card card : cards) {
 			card.setBankid(bank.getId());
 			cardService.addCardDetails(card);
 		}
 		return update;
 	}
+
 	@GetMapping("/getDetails/{id}")
-	public Bank getDetails (@PathVariable ("id") Integer id) {
+	@ApiOperation(value = "Request to get bank card details by id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok"), 
+			@ApiResponse(code = 404, message = "Resource Not Found"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public Bank getDetails(@PathVariable("id") Integer id) {
 		Bank get = bankService.getDetails(id);
 		return get;
 	}
+
 	@DeleteMapping("/deleteDetails/{id}")
-	public void deleteDetails (@PathVariable ("id") Integer id) {
+	@ApiOperation(value = "Request to delete bank card details by id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok"), 
+			@ApiResponse(code = 404, message = "Resource Not Found"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public void deleteDetails(@PathVariable("id") Integer id) {
 		bankService.deleteDetails(id);
 	}
+
 	@GetMapping("/getDetailsNameAccount")
-	public Bank search (@RequestParam ("bankName") String bankName ,
-			@RequestParam ("bankAccountNumber") String bankAccountNumber) {
-	  Bank search = bankService.search(bankName, bankAccountNumber);
-	return search;
+	@ApiOperation(value = "Request to get bank card details using name and account number")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok"), 
+			@ApiResponse(code = 404, message = "Resource Not Found"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public Bank search(@RequestParam("bankName") String bankName,
+			@RequestParam("bankAccountNumber") String bankAccountNumber) {
+		Bank search = bankService.search(bankName, bankAccountNumber);
+		return search;
 	}
 }
-
-

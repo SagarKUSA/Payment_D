@@ -13,41 +13,64 @@ import org.springframework.web.bind.annotation.RestController;
 import com.payment.model.Card;
 import com.payment.service.CardService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 public class CardController {
-	
-	
+
 	@Autowired
 	private CardService cardService;
-	
-	
+
 	@PostMapping("/addCardDetails")
-public Card addCardDetails (@RequestBody Card card) {
-	Card add= cardService.addCardDetails(card);
-    return add;
-}
+	@ApiOperation(value = "Request to add card details")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Created"), 
+			@ApiResponse(code = 400, message = "Invalid Request"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public Card addCardDetails(@RequestBody Card card) {
+		Card add = cardService.addCardDetails(card);
+		return add;
+	}
+
 	@PutMapping("/updateCard")
-	public Card updateCardDetasils (@RequestBody Card card) {
+	@ApiOperation(value = "Request to edit card details")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok"), 
+			@ApiResponse(code = 404, message = "Resource Not Found"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public Card updateCardDetasils(@RequestBody Card card) {
 		Card update = cardService.updateCardDetasils(card);
 		return update;
 	}
-	
+
 	@GetMapping("/getCardDetails/{id}")
-	public Card getCardDetails (@PathVariable ("id") Integer id) {
-		Card get= cardService.getCardDetails(id);
+	@ApiOperation(value = "Request to get card details using id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok"), 
+			@ApiResponse(code = 404, message = "Resource Not Found"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public Card getCardDetails(@PathVariable("id") Integer id) {
+		Card get = cardService.getCardDetails(id);
 		return get;
 	}
-	
+
 	@DeleteMapping("deleteCardDetails")
-	public void deleteCardsDetails (@PathVariable ("id") Integer id) {
+	@ApiOperation(value = "Request to delete card details using id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok"), 
+			@ApiResponse(code = 404, message = "Resource Not Found"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public void deleteCardsDetails(@PathVariable("id") Integer id) {
 		cardService.deleteCardsDetails(id);
-		
+
 	}
-	
+
 	@GetMapping("searchByFirstLastName/")
-	public Card searchCard (@RequestParam ("firstName") String payerFirstName ,
-			               @RequestParam ("lastName") String payerLastName) {
-      Card search=  cardService.searchCard(payerFirstName, payerLastName);
-	return search;
-}
+	@ApiOperation(value = "Request to get card details using payer firstname and lastname")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok"), 
+			@ApiResponse(code = 404, message = "Resource Not Found"),
+			@ApiResponse(code = 500, message = "Internal Error")})
+	public Card searchCard(@RequestParam("firstName") String payerFirstName,
+			@RequestParam("lastName") String payerLastName) {
+		Card search = cardService.searchCard(payerFirstName, payerLastName);
+		return search;
 	}
+}
